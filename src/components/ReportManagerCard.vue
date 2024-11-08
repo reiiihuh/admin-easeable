@@ -77,7 +77,6 @@ export default {
         const response = await axios.get("http://localhost:5000/expenses/verif");
         this.laporanData = response.data.map(item => ({
           ...item,
-          komentar: '', // Tambahkan properti komentar
           selectedAction: '' // Tambahkan properti untuk pilihan aksi
         }));
       } catch (error) {
