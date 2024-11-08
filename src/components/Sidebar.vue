@@ -37,9 +37,9 @@
   
       <div class="menu">
           <h3>Others</h3>
-          <router-link class="button" to="/Settings">
-              <span class="material-icons">settings</span>
-              <span class="text">Pengaturan</span>
+          <router-link class="button" to="/AddAccount">
+              <span class="material-icons">manage_accounts</span>
+              <span class="text">Kelola Akun</span>
           </router-link>
       </div>
       <div class="menu">
