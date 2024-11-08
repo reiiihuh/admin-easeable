@@ -6,13 +6,13 @@
           <span class="user-name">{{ userName }}</span>
           <span class="user-role">{{ userRole }}</span>
         </div>
-        <i class="dropdown-icon"></i>
+        <!-- <i class="dropdown-icon"></i> -->
       </div>
-      <div v-if="isDropdownOpen" class="dropdown-menu">
+      <!-- <div v-if="isDropdownOpen" class="dropdown-menu">
         <a href="#" class="dropdown-item">Profile</a>
         <a href="#" class="dropdown-item">Settings</a>
         <a href="#" class="dropdown-item">Logout</a>
-      </div>
+      </div> -->
     </nav>
   </template>
   
