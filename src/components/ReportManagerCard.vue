@@ -189,7 +189,7 @@ h1 {
 
 .laporan-table tbody {
   display: block;
-  max-height: 300px; /* Sesuaikan tinggi tabel sesuai kebutuhan */
+  max-height: 440px; /* Sesuaikan tinggi tabel sesuai kebutuhan */
   overflow-y: auto;
   width: 100%;
 }
