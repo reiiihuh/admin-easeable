@@ -6,7 +6,7 @@
       </section>
     </div>
     <div class="right">
-      <form @submit.prevent="handleLogin">
+      <form @submit.prevent="loginAdmin">
         <section class="copy">
           <h2>Login</h2>
         </section>
@@ -28,51 +28,54 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'LoginView',
-  data() {
-    return {
-      username: '',
-      password: ''
-    };
-  },
-  methods: {
-    async handleLogin() {
-      try {
-        // Kirim request ke server menggunakan fetch API
-        const response = await fetch('http://localhost:5000/login', {  // Ganti dengan endpoint yang benar
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: this.username,
-            password: this.password,
-          }),
-        });
+<script setup>
+import axios from 'axios';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
 
-        // Cek jika login berhasil
-        if (!response.ok) {
-          const errorMessage = await response.json();
-          throw new Error(errorMessage.msg || 'Login gagal');
-        }
+const username = ref('');
+const password = ref('');
+const error = ref('');
+const router = useRouter();
+const showPassword = ref(false);
 
-        const data = await response.json();
-        alert('Login berhasil!');
+const loginAdmin = async () => {
+  try {
+    const response = await axios.post('http://localhost:3000/api/admin/login', {
+      username: username.value,
+      password: password.value
+    });
 
-        // Simpan token dan informasi user ke localStorage
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('username', data.username);  // Simpan username
-        localStorage.setItem('role', data.role);  // Simpan role
+    const token = response.data.token;
+    const user = response.data.user;
 
-        // Redirect ke halaman Home setelah login berhasil
-        this.$router.push('/Home');
-      } catch (error) {
-        console.error(error);
-        alert('Username atau Password salah.');
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Login Berhasil!',
+      showConfirmButton: false,
+      timer: 1500,
+      customClass: {
+        popup: 'swal-custom'
       }
-    }
+    });
+
+    setTimeout(() => {
+      router.push('/Homepage');
+    }, 1600);
+  } catch (err) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Login Gagal',
+      text: err.response?.data?.message || 'Username atau password salah.',
+      confirmButtonText: 'Coba Lagi',
+      customClass: {
+        popup: 'swal-custom'
+      }
+    });
   }
 };
 </script>
@@ -137,8 +140,8 @@ export default {
   
   /* BG IMAGE */
   .left {
-    background: linear-gradient(rgba(247, 228, 85, 0.5), rgba(223, 186, 21, 0.9)),
-      url('/src/assets/bg.jpg');
+    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(140, 140, 140, 0.9)),
+      url('/src/assets/Logo black.png');
     background-size: cover;
   }
   

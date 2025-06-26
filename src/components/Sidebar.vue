@@ -1,7 +1,7 @@
 <template>
     <aside :class="`${is_expanded && 'is-expanded'}`">
       <div class="logo">
-          <img src="../assets/icon.png" alt="kkc">
+          <img src="../assets/Logo icon.png" alt="kkc">
       </div>
   
       <div class="menu-toggle-wrap">
@@ -14,34 +14,34 @@
   
       <div class="menu">
           <h3>Main</h3>
-          <router-link class="button" to="/Home">
+          <!-- <router-link class="button" to="/Home">
               <span class="material-icons">analytics</span>
               <span class="text">Dashboard</span>
-          </router-link>
-          <router-link class="button" to="/InputTransac">
-              <span class="material-icons">edit</span>
-              <span class="text">Pencatatan Pengeluaran</span>
-          </router-link>
-          <!-- disable detail sementara karena belum ada api nya -->
-          <!-- <router-link class="button" to="/DetailTransac">
-              <span class="material-icons">payments</span>
-              <span class="text">Detail Pengeluaran</span>
           </router-link> -->
-          <router-link v-if="userRole === 'KASIR'" class="button" to="/ReportManager">
+          <router-link class="button" to="/InputDataRute">
+              <span class="material-icons">edit</span>
+              <span class="text">Tambah Lokasi & Rute</span>
+          </router-link>
+          <router-link class="button" to="/ReportManager">
               <span class="material-icons">fact_check</span>
-              <span class="text">Kelola Laporan</span>
+              <span class="text">Kelola Lokasi dan Rute</span>
+          </router-link>
+        <!-- disable detail sementara karena belum ada api nya -->
+          <router-link class="button" to="/DetailTransac">
+              <span class="material-icons">chat</span>
+              <span class="text">Kelola Feedback</span>
           </router-link>
       </div>
   
       <div class="flex"></div>
   
-      <div class="menu">
+      <!-- <div class="menu">
           <h3>Others</h3>
           <router-link class="button" to="/AddAccount">
               <span class="material-icons">manage_accounts</span>
               <span class="text">Kelola Akun</span>
           </router-link>
-      </div>
+      </div> -->
       <div class="menu">
           <!-- Tambahkan event @click.prevent agar tidak langsung pindah halaman sebelum logout -->
           <router-link class="button" to="/Login" @click.prevent="handleLogout">

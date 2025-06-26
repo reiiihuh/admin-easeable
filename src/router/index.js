@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
-import Input from '../views/InputTransac.vue';
-import Detail from '../views/DetailTransac.vue';
+import Input from '../views/TambahRuteLokasi.vue';
+import Detail from '../views/KelolaFeedback.vue';
 import LoginView from '../views/Login.vue';
 import RegisView from '../views/Register.vue';
 import Settings from '../views/Settings.vue';
 import AccManager from '../views/AccManager.vue';
-import ReportManager from '../views/ReportManager.vue';
+import ReportManager from '../views/KelolaLokasi.vue';
 import AddAccount from '../views/AddAccount.vue';
 
 const router = createRouter({
@@ -29,7 +29,7 @@ const router = createRouter({
       component: Home,
     },
     {
-      path: '/InputTransac',
+      path: '/InputDataRute',
       component: Input,
     },
     {

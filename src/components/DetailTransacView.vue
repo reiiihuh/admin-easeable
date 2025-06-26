@@ -1,155 +1,244 @@
 <template>
-    <div class="detail-pengeluaran">
-      <!-- <h1>Detail Pengeluaran</h1> -->
-      <div class="detail-container">
-        <div class="image-section">
-          <img :src="detailData.foto" alt="Foto Pengeluaran" />
+  <div class="kelola-feedback">
+    <table>
+      <thead>
+        <tr>
+          <th>Id Feedback</th>
+          <th>Nama Mahasiswa</th>
+          <th>Jenis</th>
+          <th>Deskripsi</th>
+          <th>Tanggal Masuk Feedback</th>
+          <th>Respon Admin</th>
+          <th>Tanggal Respon</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in feedbackList" :key="item.id_feedback">
+          <td>{{ item.id_feedback || '-' }}</td>
+          <td>{{ item.nama_mahasiswa || '-' }}</td>
+          <td>{{ item.jenis_laporan }}</td>
+          <td>{{ item.deskripsi_feedback }}</td>
+          <td>{{ formatDate(item.tanggal_feedback) }}</td>
+          <td>{{ item.respon_admin || '-' }}</td>
+          <td>{{ formatDate(item.tanggal_respon) }}</td>
+          <td>
+            <button 
+              v-if="!item.respon_admin"
+              class="btn-reply"
+              @click="balas(item)"
+            >
+              Balas
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Modal Balasan -->
+    <div v-if="selectedFeedback" class="modal-overlay">
+      <div class="modal-content">
+        <h3>Balas Feedback</h3>
+        <p><strong>Feedback:</strong> {{ selectedFeedback.deskripsi_feedback }}</p>
+        <textarea v-model="respon" placeholder="Tulis balasan di sini..."></textarea>
+        <div class="modal-actions">
+          <button class="btn-kirim" @click="kirimRespon">Kirim</button>
+          <button class="btn-batal" @click="selectedFeedback = null">Batal</button>
         </div>
-        <div class="info-section">
-          <div class="form-group">
-            <label>Judul</label>
-            <input v-model="formData.title" :disabled="!isEditing" />
-          </div>
-          <div class="form-group">
-            <label>Tanggal</label>
-            <input type="date" v-model="formData.date" :disabled="!isEditing" />
-          </div>
-          <div class="form-group">
-            <label>Jenis</label>
-            <input v-model="formData.type" :disabled="!isEditing" />
-          </div>
-          <div class="form-group">
-            <label>Kategori</label>
-            <input v-model="formData.category" :disabled="!isEditing" />
-          </div>
-          <div class="form-group">
-            <label>Biaya</label>
-            <input v-model="formData.cost" :disabled="!isEditing" />
-          </div>
-          <div class="form-group">
-            <label>Nama Pelapor</label>
-            <input v-model="formData.reporter" :disabled="!isEditing" />
-          </div>
-          <div class="form-group">
-            <label>Role</label>
-            <input v-model="formData.role" :disabled="!isEditing" />
-          </div>
-          <div class="form-group">
-            <label>Deskripsi</label>
-            <textarea v-model="formData.description" :disabled="!isEditing"></textarea>
-          </div>
-        </div>
-      </div>
-      <div class="button-group">
-      <button @click="toggleEditMode" v-if="!isEditing" class="edit">Edit</button>
-      <button @click="saveDetails" v-if="isEditing" class="save">Save</button>
-      <button @click="cancelEdit" v-if="isEditing" class="cancel">Cancel</button>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue';
-  
-  const isEditing = ref(false);
-  const detailData = ref({
-    foto: 'https://via.placeholder.com/200',
-    title: 'Makan Siang',
-    date: '2024-08-29',
-    type: 'Non-Operational',
-    category: 'Pribadi',
-    cost: 'Rp. 100.000',
-    reporter: 'John Doe',
-    role: 'Staff',
-    description: 'Pengeluaran untuk makan siang bersama tim.'
-  });
-  
-  const formData = ref({ ...detailData.value });
-  
-  const toggleEditMode = () => {
-    isEditing.value = true;
-  };
-  
-  const saveDetails = () => {
-    isEditing.value = false;
-    detailData.value = { ...formData.value };
-  };
-  
-  const cancelEdit = () => {
-    isEditing.value = false;
-    formData.value = { ...detailData.value };
-  };
-  </script>
-  
-  <style scoped lang="scss">
-  .detail-pengeluaran {
-    padding: 1.5rem;
-    h1 {
-      color: var(--green-kkc);
-      font-weight: 700;
+  </div>
+</template>
+
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import Swal from 'sweetalert2'
+
+const feedbackList = ref([])
+const selectedFeedback = ref(null)
+const respon = ref('')
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return '-'
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('id-ID', {
+    year: 'numeric', month: 'long', day: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  })
+}
+
+const getFeedback = async () => {
+  try {
+    const admin = JSON.parse(localStorage.getItem('user'))
+    if (!admin || !admin.id_admin) {
+      Swal.fire('Error', 'Admin belum login!', 'error')
+      return
     }
-    .detail-container {
-      display: flex;
-      gap: 2rem;
-    }
-    .image-section {
-      flex: 1;
-      img {
-        width: 100%;
-        max-width: 200px;
-        border-radius: 8px;
-      }
-    }
-    .info-section {
-      flex: 4;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        label {
-          font-weight: bold;
-          margin-bottom: 0.5rem;
-        }
-        input,
-        textarea {
-          padding: 0.5rem;
-          border: 2px solid var(--outline);
-          border-radius: 8px;
-          resize: none;
-          &:disabled {
-            background-color: #f5f5f5;
-          }
-        }
-      }
-      textarea {
-        resize: vertical;
-      }
-    }
-    .button-group {
-      margin-top: 1.5rem;
-      button {
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        &.edit {
-          background-color: var(--green-kkc);
-          color: white;
-          margin-right: 1rem;
-        }
-        &.save {
-          background-color: var(--green-kkc);
-          color: white;
-          margin-right: 1rem;
-        }
-        &.cancel {
-          background-color: red;
-          color: white;
-        }
-      }
-    }
+
+    const res = await axios.get(`http://localhost:3000/api/notifikasi/admin/${admin.id_admin}`)
+    feedbackList.value = res.data
+  } catch (err) {
+    Swal.fire('Gagal', 'Gagal mengambil data', 'error')
+    console.error('ERROR AMBIL FEEDBACK:', err)
   }
-  </style>
-  
+}
+
+const balas = (item) => {
+  selectedFeedback.value = item
+  respon.value = ''
+}
+
+const kirimRespon = async () => {
+  try {
+    const admin = JSON.parse(localStorage.getItem('user'))
+    if (!admin || !admin.id_admin) {
+      Swal.fire('Gagal', 'Admin belum login', 'error')
+      return
+    }
+
+    await axios.post('http://localhost:3000/api/notifikasi/submit', {
+      id_feedback: selectedFeedback.value.id_feedback,
+      id_admin: admin.id_admin,
+      deskripsi: respon.value
+    })
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Balasan berhasil dikirim!',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1500,
+      customClass: {
+        popup: 'swal-custom'
+      }
+    })
+
+    selectedFeedback.value = null
+    getFeedback()
+  } catch (err) {
+    Swal.fire('Gagal', 'Gagal mengirim balasan', 'error')
+    console.error('ERROR KIRIM BALASAN:', err)
+  }
+}
+
+onMounted(getFeedback)
+</script>
+
+<style scoped>
+.kelola-feedback {
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.kelola-feedback table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  /* border-radius: 8px; */
+  overflow: hidden;
+  /* box-shadow: 0 2px 10px rgba(0,0,0,0.1); */
+}
+
+.kelola-feedback th, 
+.kelola-feedback td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 14px;
+  vertical-align: top;
+}
+
+.kelola-feedback th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+}
+
+.kelola-feedback .btn-reply {
+  background-color: #0c7b53;
+  color: #fff;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.kelola-feedback .btn-reply:hover {
+  background-color: #096445;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.modal-content h3 {
+  margin-bottom: 0.5rem;
+  color: #0c7b53;
+}
+
+.modal-content p {
+  font-size: 14px;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.modal-content textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.modal-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-actions .btn-kirim {
+  background: #0c7b53;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-actions .btn-batal {
+  background: #d33;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+</style>

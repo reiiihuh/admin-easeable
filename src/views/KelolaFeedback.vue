@@ -1,6 +1,6 @@
 <template>
     <main class="input-transac-page">
-        <h1>Detail Transaksi</h1>
+        <h1>Kelola Feedback</h1>
         <!-- <p>Halaman Detail Transaksi</p> -->
     </main>
     <div class="detail">

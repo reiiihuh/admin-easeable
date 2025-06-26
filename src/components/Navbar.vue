@@ -22,14 +22,14 @@
       return {
         userName: "User",  // Nilai default sebelum data diambil
         userRole: "Role",  // Nilai default sebelum data diambil
-        profilePicture: "/src/assets/icon.png",
+        profilePicture: "/src/assets/Logo icon.png",
         isDropdownOpen: false
       };
     },
     created() {
       // Ambil data user dari localStorage
-      this.userName = localStorage.getItem('username') || 'User';  // Jika tidak ada, tampilkan "User"
-      this.userRole = localStorage.getItem('role') || 'Role';      // Jika tidak ada, tampilkan "Role"
+      this.userName = localStorage.getItem('name') || 'User';  // Jika tidak ada, tampilkan "User"
+      this.userRole = localStorage.getItem('email') || 'Role';      // Jika tidak ada, tampilkan "Role"
     },
     methods: {
       toggleDropdown() {

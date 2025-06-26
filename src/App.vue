@@ -41,9 +41,9 @@
 	--light: #f1f5f9;
 	--sidebar-width: 300px;
 	--outline: #d9d9d9;
-	--green-kkc: #006400;
+	--green-kkc: #4472C4;
 	--inactive: #9a9a9a;
-	--golden-kkc: #DAA520;
+	--golden-kkc: #9a9a9a;
 	--white: #ffff;
 	--black: #000000;
 	--blue-coe: #4472C4;

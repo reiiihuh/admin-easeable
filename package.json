@@ -1,5 +1,5 @@
 {
-  "name": "expense-kkc",
+  "name": "modul-admin-easeable",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,6 +12,7 @@
     "axios": "^1.7.7",
     "chart.js": "^4.4.5",
     "jwt-decode": "^4.0.0",
+    "sweetalert2": "^11.22.0",
     "vue": "^3.4.37",
     "vue-chartjs": "^5.3.1",
     "vue-router": "^4.4.3"
