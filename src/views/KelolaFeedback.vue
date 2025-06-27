@@ -1,16 +1,15 @@
 <template>
     <main class="input-transac-page">
         <h1>Kelola Feedback</h1>
-        <!-- <p>Halaman Detail Transaksi</p> -->
     </main>
     <div class="detail">
-        <DetailTransacView/>
+        <KelolaFeedback/>
     </div>
 
 </template>
 
 <script setup>
-import DetailTransacView from '../components/DetailTransacView.vue';
+import KelolaFeedback from '../components/KelolaFeedback.vue';
 </script>
 
 <style lang="scss" scoped>

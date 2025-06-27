@@ -4,11 +4,18 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 
 const props = defineProps({
-  initialForm: Object
+  initialForm: Object,
+  mode: {
+    type: String,
+    default: 'edit' // 'edit' atau 'add'
+  }
 })
+
 const emit = defineEmits(['success', 'cancel'])
 
 const localForm = ref({})
+
+
 
 watch(() => props.initialForm, (val) => {
   localForm.value = JSON.parse(JSON.stringify(val))
@@ -165,6 +172,35 @@ const submitEdit = async () => {
     Swal.fire('Gagal!', 'Terjadi kesalahan saat menyimpan.', 'error')
   }
 }
+
+const submitAddLokasi = async () => {
+  try {
+    Swal.fire({
+      title: 'Menyimpan Lokasi...',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    })
+
+    const form = new FormData()
+    form.append('nama_lokasi', localForm.value.nama_lokasi)
+    form.append('deskripsi', localForm.value.deskripsi || '')
+    form.append('info', localForm.value.info || '')
+    if (localForm.value.placeholder instanceof File) {
+      form.append('url_placeholder', localForm.value.placeholder)
+    }
+
+    await axios.post('http://localhost:3000/api/upload/lokasi', form)
+
+    Swal.close()
+    Swal.fire('Sukses!', 'Lokasi berhasil ditambahkan.', 'success')
+    emit('success')
+  } catch (err) {
+    Swal.close()
+    console.error(err)
+    Swal.fire('Gagal!', 'Gagal menambahkan lokasi.', 'error')
+  }
+}
+
 </script>
 
 <template>
@@ -182,7 +218,7 @@ const submitEdit = async () => {
       <img v-else-if="localForm.url_placeholder" :src="localForm.url_placeholder" class="preview-img" />
     </div>
 
-    <div class="langkah-section">
+    <div class="langkah-section" v-if="props.mode === 'edit'">
       <h3>Langkah Navigasi</h3>
 
       <div v-for="(langkah, i) in localForm.langkahs" :key="i" class="langkah-box">
@@ -215,9 +251,21 @@ const submitEdit = async () => {
     </div>
 
     <div class="form-actions">
-      <button @click="submitEdit" class="btn-save">Simpan</button>
-      <button @click="$emit('cancel')" class="btn-cancel">Batal</button>
-    </div>
+    <button
+      v-if="props.mode === 'add'"
+      @click="submitAddLokasi"
+      class="btn-save"
+    >Tambah Lokasi</button>
+
+    <button
+      v-else
+      @click="submitEdit"
+      class="btn-save"
+    >Simpan Perubahan</button>
+
+    <button @click="$emit('cancel')" class="btn-cancel">Batal</button>
+  </div>
+
   </div>
 </template>
 

@@ -18,16 +18,16 @@
               <span class="material-icons">analytics</span>
               <span class="text">Dashboard</span>
           </router-link> -->
-          <router-link class="button" to="/InputDataRute">
+          <!-- <router-link class="button" to="/InputDataRute">
               <span class="material-icons">edit</span>
               <span class="text">Tambah Lokasi & Rute</span>
-          </router-link>
-          <router-link class="button" to="/ReportManager">
+          </router-link> -->
+          <router-link class="button" to="/KelolaLokasi">
               <span class="material-icons">fact_check</span>
-              <span class="text">Kelola Lokasi dan Rute</span>
+              <span class="text">Kelola Lokasi & Rute</span>
           </router-link>
         <!-- disable detail sementara karena belum ada api nya -->
-          <router-link class="button" to="/DetailTransac">
+          <router-link class="button" to="/Feedback">
               <span class="material-icons">chat</span>
               <span class="text">Kelola Feedback</span>
           </router-link>
@@ -65,27 +65,11 @@
       is_expanded.value = !is_expanded.value
   }
   
-  const handleLogout = async () => {
-    try {
-        const response = await fetch('http://localhost:5000/logout', {
-            method: 'DELETE',
-            credentials: 'include',
-        });
 
-        if (response.ok) {
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('username');
-            localStorage.removeItem('role');
-            router.push('/Login');
-        } else {
-            const errorMessage = await response.text();
-            throw new Error(`Logout gagal: ${errorMessage}`);
-        }
-    } catch (error) {
-        console.error('Error detail:', error);
-        alert(`Terjadi kesalahan saat logout: ${error.message}`);
-    }
-};
+function handleLogout() {
+  localStorage.clear();
+  location.href = '/Login';
+}
 
 
   </script>  

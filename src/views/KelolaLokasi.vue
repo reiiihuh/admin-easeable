@@ -3,13 +3,13 @@
         <h1>Kelola Lokasi dan Rute</h1>
     </main>
     <div class="card">
-        <ReportManagerCard/>
+        <KelolaLokasi/>
     </div>
 
 </template>
 
 <script setup>
-import ReportManagerCard from '../components/KelolaLokasiTable.vue';
+import KelolaLokasi from '../components/KelolaLokasiTable.vue';
 </script>
 
 <style lang="scss" scoped>

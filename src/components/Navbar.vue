@@ -4,7 +4,7 @@
         <img :src="profilePicture" alt="User Profile" class="profile-pic">
         <div class="user-info">
           <span class="user-name">{{ userName }}</span>
-          <span class="user-role">{{ userRole }}</span>
+          <!-- <span class="user-role">{{ userRole }}</span> -->
         </div>
         <!-- <i class="dropdown-icon"></i> -->
       </div>
@@ -29,7 +29,7 @@
     created() {
       // Ambil data user dari localStorage
       this.userName = localStorage.getItem('name') || 'User';  // Jika tidak ada, tampilkan "User"
-      this.userRole = localStorage.getItem('email') || 'Role';      // Jika tidak ada, tampilkan "Role"
+      // this.userRole = localStorage.getItem('email') || 'Role';      // Jika tidak ada, tampilkan "Role"
     },
     methods: {
       toggleDropdown() {

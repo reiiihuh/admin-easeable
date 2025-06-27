@@ -64,7 +64,7 @@ const loginAdmin = async () => {
     });
 
     setTimeout(() => {
-      router.push('/Homepage');
+      router.push('/KelolaLokasi');
     }, 1600);
   } catch (err) {
     Swal.fire({

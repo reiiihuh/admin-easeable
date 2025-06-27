@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/Home.vue';
+
 import Input from '../views/TambahRuteLokasi.vue';
 import Detail from '../views/KelolaFeedback.vue';
 import LoginView from '../views/Login.vue';
 import RegisView from '../views/Register.vue';
-import Settings from '../views/Settings.vue';
-import AccManager from '../views/AccManager.vue';
+
+
 import ReportManager from '../views/KelolaLokasi.vue';
-import AddAccount from '../views/AddAccount.vue';
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -24,35 +24,42 @@ const router = createRouter({
       path: '/Register',
       component: RegisView,
     },
-    {
-      path: '/Home',
-      component: Home,
-    },
+
     {
       path: '/InputDataRute',
       component: Input,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
-      path: '/DetailTransac',
+      path: '/Feedback',
       component: Detail,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
-      path: '/Settings',
-      component: Settings,
-      },
-    {
-      path: '/AccManager',
-      component: AccManager,
-    },
-    {
-      path: '/ReportManager',
+      path: '/KelolaLokasi',
       component: ReportManager,
-    },
-    {
-      path: '/AddAccount',
-      component: AddAccount,
-    },
+      meta: {
+        requiresAuth: true
+      }
+    }
   ],
+});
+
+// PROTECT ROUTES
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('token');
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/Login'); // Balik ke login kalau belum login
+  } else if ((to.path === '/Login') && isAuthenticated) {
+    next('/KelolaLokasi'); // Kalau udah login, ga bisa akses login/register lagi
+  } else {
+    next(); // Lanjut normal
+  }
 });
 
 export default router;
