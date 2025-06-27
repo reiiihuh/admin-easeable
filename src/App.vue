@@ -21,7 +21,7 @@
   import { useRoute } from 'vue-router';
   import { computed } from 'vue';
   import Sidebar from './components/Sidebar.vue';
-  import Navbar from './components/Navbar.vue';
+//   import Navbar from './components/Navbar.vue';
   
   // Menggunakan useRoute untuk mendapatkan rute saat ini
   const route = useRoute();
